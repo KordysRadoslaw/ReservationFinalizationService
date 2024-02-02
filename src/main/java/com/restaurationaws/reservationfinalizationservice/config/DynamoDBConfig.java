@@ -11,32 +11,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//to sprawdzic
 @EnableDynamoDBRepositories(basePackages = "com.restaurationaws.reservationfinalizationservice.repositories")
 public class DynamoDBConfig {
 
-    @Value("${amazon.dynamodb.endpoint}")
-    private String amazonDynamoDBEndpoint;
+    @Value("${AWS_ACCESS_KEY_ID}")
+    private String awsAccessKeyId;
 
-    @Value("${amazon.aws.accesskey}")
-    private String amazonAWSAccessKey;
-
-    @Value("${amazon.aws.secretkey}")
-    private String amazonAWSSecretKey;
+    @Value("${AWS_SECRET_ACCESS_KEY}")
+    private String awsSecretAccessKey;
 
     @Bean
     public AmazonDynamoDB amazonDynamoDB() {
         AmazonDynamoDB amazonDynamoDB
                 = new AmazonDynamoDBClient(amazonAwsCredentials());
 
-        if (!StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
-            amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
-        }
-
         return amazonDynamoDB;
     }
 
     public AWSCredentials amazonAwsCredentials(){
-        return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
+        return new BasicAWSCredentials(awsAccessKeyId, awsSecretAccessKey);
     }
 }
