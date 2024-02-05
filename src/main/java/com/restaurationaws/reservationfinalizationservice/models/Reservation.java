@@ -15,8 +15,8 @@ public class Reservation {
     private String lastName;
     private String tokenId;
     private String nummberOfGuests;
-
     private String status;
+
 
     public Reservation() {
     }

@@ -1,47 +1,85 @@
 package com.restaurationaws.reservationfinalizationservice.services;
 
+
+
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.restaurationaws.reservationfinalizationservice.models.Reservation;
-import com.restaurationaws.reservationfinalizationservice.repositories.ReservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import com.restaurationaws.reservationfinalizationservice.repository.ReservationRepository;
+import java.util.List;
 
 
-@Service
-public class ReservationService {
+
+public class ReservationService implements ReservationRepository{
 
     private final ReservationRepository reservationRepository;
 
-    @Autowired
-    public ReservationService(ReservationRepository reservationRepository) {
+    private final Table reservationTable;
+
+    public ReservationService(ReservationRepository reservationRepository, DynamoDB dynamoDB) {
         this.reservationRepository = reservationRepository;
+        this.reservationTable = dynamoDB.getTable("RestaurantReservation");
     }
 
-    public Optional<Reservation> getReservationById(String reservationId) {
-        return reservationRepository.findByReservationId(reservationId);
+    public boolean updateReservationStatus(String reservationId, String status) {
+        try {
+            UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+                    .withPrimaryKey("reservationId", reservationId)
+                    .withUpdateExpression("set #s = :s")
+                    .withValueMap(new ValueMap().withString(":s", status));
+
+            UpdateItemOutcome outcome = reservationTable.updateItem(updateItemSpec);
+            //return outcome.getUpdateItemResult().getSdkHttpMetadata().getHttpStatusCode() == 200;
+            return reservationRepository.updateReservationStatus(reservationId, status);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public boolean finalizeReservation(String reservationId) {
-        Optional<Reservation> optionalReservation = reservationRepository.findByReservationId(reservationId);
 
-        if (optionalReservation.isPresent()) {
-            Reservation reservation = optionalReservation.get();
-            String status = reservation.getStatus();
+    public void deleteReservation(String reservationId) {
+        reservationRepository.deleteReservation(reservationId);
+    }
 
-            if ("PENDING".equals(status)) {
-                // Dodaj logikę finalizacji rezerwacji
-                // Na przykład, ustaw pole finalized na true
-                reservation.setStatus("CLOSED");
-                reservationRepository.save(reservation);
-                return true;
-            } else if ("CLOSED".equals(status) || "CANCELLED".equals(status)) {
-                return false;
+    public Reservation getReservationById(String reservationId) {
+        try {
+
+
+            Item item = reservationTable.getItem("reservationId", reservationId);
+            if (item != null) {
+                Reservation reservation = new Reservation();
+                reservation.setReservationId(item.getString("reservationId"));
+                reservation.setDate(item.getString("date"));
+                reservation.setEmail(item.getString("email"));
+                reservation.setFirstName(item.getString("firstName"));
+                reservation.setLastName(item.getString("lastName"));
+                reservation.setNummberOfGuests(item.getString("nummberOfGuests"));
+                reservation.setStatus(item.getString("status"));
+
+                return reservationRepository.getReservationById(reservationId);
             }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
+        }
+        return null;
+    }
+
+    public List<Reservation> getAllReservations() {
+        try {
+            List<Reservation> reservation = reservationRepository.getAllReservations();
+
+            return reservation;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
         }
 
-        return false;
     }
-
-
 }
