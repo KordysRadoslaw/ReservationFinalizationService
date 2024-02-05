@@ -43,7 +43,12 @@ public class ReservationService implements ReservationRepository{
 
 
     public void deleteReservation(String reservationId) {
-        reservationRepository.deleteReservation(reservationId);
+        try{
+            reservationRepository.deleteReservation(reservationId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public Reservation getReservationById(String reservationId) {
