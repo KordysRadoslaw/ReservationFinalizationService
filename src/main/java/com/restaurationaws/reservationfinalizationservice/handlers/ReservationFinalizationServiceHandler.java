@@ -1,7 +1,9 @@
 package com.restaurationaws.reservationfinalizationservice.handlers;
 
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -10,27 +12,28 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.restaurationaws.reservationfinalizationservice.models.Reservation;
 import com.restaurationaws.reservationfinalizationservice.repository.ReservationDynamoDB;
+import com.restaurationaws.reservationfinalizationservice.repository.ReservationQuery;
+import com.restaurationaws.reservationfinalizationservice.repository.ReservationQueryImpl;
+import com.restaurationaws.reservationfinalizationservice.repository.ReservationRepositoryImpl;
 import com.restaurationaws.reservationfinalizationservice.services.ReservationService;
+import com.restaurationaws.reservationfinalizationservice.services.ReservationServiceImpl;
 
 import java.util.List;
 
 public class ReservationFinalizationServiceHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    private final DynamoDB dynamoDB;
     private final ReservationDynamoDB reservationRepository;
-    private final ReservationService reservationService;
 
-    public ReservationFinalizationServiceHandler(DynamoDB dynamoDB, ReservationService reservationService, ReservationDynamoDB reservationRepository) {
-        this.dynamoDB = dynamoDB;
-        this.reservationService = reservationService;
-        this.reservationRepository = reservationRepository;
-    }
     public ReservationFinalizationServiceHandler() {
-        this.dynamoDB = new DynamoDB(AmazonDynamoDBClient.builder().build());
-        this.reservationRepository = new ReservationDynamoDB(dynamoDB);
-        this.reservationService = new ReservationService(dynamoDB);
+        AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.defaultClient();
+        ReservationService reservationService = new ReservationServiceImpl(new ReservationRepositoryImpl(new DynamoDB(amazonDynamoDB)));
+        ReservationQuery reservationQuery = new ReservationQueryImpl(new ReservationRepositoryImpl(new DynamoDB(amazonDynamoDB)));
+        this.reservationRepository = new ReservationDynamoDB(new DynamoDB(amazonDynamoDB), reservationService, reservationQuery);
     }
 
+    public ReservationFinalizationServiceHandler(DynamoDB dynamoDB, ReservationService reservationService, ReservationQuery reservationQuery) {
+        this.reservationRepository = new ReservationDynamoDB(dynamoDB, reservationService, reservationQuery);
+    }
 
 
     @Override
