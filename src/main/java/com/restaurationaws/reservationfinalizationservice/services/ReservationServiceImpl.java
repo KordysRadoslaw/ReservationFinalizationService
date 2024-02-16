@@ -1,7 +1,7 @@
 package com.restaurationaws.reservationfinalizationservice.services;
 
 import com.restaurationaws.reservationfinalizationservice.models.Reservation;
-import com.restaurationaws.reservationfinalizationservice.repository.ReservationRepository;
+import com.restaurationaws.reservationfinalizationservice.repositories.ReservationRepository;
 
 import java.util.List;
 

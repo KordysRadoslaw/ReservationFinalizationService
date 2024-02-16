@@ -1,4 +1,4 @@
-package com.restaurationaws.reservationfinalizationservice.repository;
+package com.restaurationaws.reservationfinalizationservice.repositories;
 
 import com.restaurationaws.reservationfinalizationservice.models.Reservation;
 

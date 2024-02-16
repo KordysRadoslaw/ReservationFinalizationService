@@ -1,11 +1,10 @@
-package com.restaurationaws.reservationfinalizationservice.repository;
+package com.restaurationaws.reservationfinalizationservice.repositories;
 
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.restaurationaws.reservationfinalizationservice.models.Reservation;
 import com.restaurationaws.reservationfinalizationservice.services.ReservationService;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDynamoDB {

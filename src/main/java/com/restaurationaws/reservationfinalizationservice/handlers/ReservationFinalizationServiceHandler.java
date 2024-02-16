@@ -2,7 +2,6 @@ package com.restaurationaws.reservationfinalizationservice.handlers;
 
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -11,14 +10,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.restaurationaws.reservationfinalizationservice.models.Reservation;
-import com.restaurationaws.reservationfinalizationservice.repository.ReservationDynamoDB;
-import com.restaurationaws.reservationfinalizationservice.repository.ReservationQuery;
-import com.restaurationaws.reservationfinalizationservice.repository.ReservationQueryImpl;
-import com.restaurationaws.reservationfinalizationservice.repository.ReservationRepositoryImpl;
+import com.restaurationaws.reservationfinalizationservice.repositories.ReservationDynamoDB;
+import com.restaurationaws.reservationfinalizationservice.repositories.ReservationQuery;
+import com.restaurationaws.reservationfinalizationservice.repositories.ReservationQueryImpl;
+import com.restaurationaws.reservationfinalizationservice.repositories.ReservationRepositoryImpl;
 import com.restaurationaws.reservationfinalizationservice.services.ReservationService;
 import com.restaurationaws.reservationfinalizationservice.services.ReservationServiceImpl;
-
-import java.util.List;
 
 public class ReservationFinalizationServiceHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 

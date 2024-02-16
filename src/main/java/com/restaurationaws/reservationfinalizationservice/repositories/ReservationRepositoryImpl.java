@@ -1,4 +1,4 @@
-package com.restaurationaws.reservationfinalizationservice.repository;
+package com.restaurationaws.reservationfinalizationservice.repositories;
 
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
