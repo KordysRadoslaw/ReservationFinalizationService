@@ -7,6 +7,9 @@ import com.restaurationaws.reservationfinalizationservice.services.ReservationSe
 
 import java.util.List;
 
+/**
+ * This class is responsible for the communication with the DynamoDB table
+ */
 public class ReservationDynamoDB {
 
     private final Table reservationTable;
@@ -22,6 +25,12 @@ public class ReservationDynamoDB {
     }
 
 
+    /**
+     * This method updates the status of the reservation
+     * @param reservationId
+     * @param status
+     * @return true if the status was updated, false otherwise
+     */
     public boolean updateReservationStatus(String reservationId, String status) {
         try{
             return reservationService.updateReservationStatus(reservationId, status);
@@ -31,6 +40,11 @@ public class ReservationDynamoDB {
     }
 
 
+    /**
+     * This method creates a new reservation
+     * @param reservationId
+     * @return the reservationId of the new reservation
+     */
     public void deleteReservation(String reservationId) {
         try{
             reservationService.deleteReservation(reservationId);
@@ -40,6 +54,11 @@ public class ReservationDynamoDB {
 
     }
 
+    /**
+     * This method creates a new reservation
+     * @param reservationId
+     * @return the reservationId of the new reservation
+     */
     public Reservation getReservationById(String reservationId) {
 
         try{

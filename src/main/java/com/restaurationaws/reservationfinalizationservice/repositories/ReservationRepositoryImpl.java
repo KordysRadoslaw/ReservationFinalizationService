@@ -11,6 +11,9 @@ import com.restaurationaws.reservationfinalizationservice.models.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Reservation Repository Implementation
+ */
 public class ReservationRepositoryImpl implements ReservationRepository{
     private final Table reservationTable;
 
@@ -26,6 +29,10 @@ public class ReservationRepositoryImpl implements ReservationRepository{
         return null;
     }
 
+    /**
+     * Get all reservations
+     * @return List of all reservations represented as Reservation objects
+     */
     @Override
     public List<Reservation> getAll() {
         List<Reservation> reservations = new ArrayList<>();
@@ -50,6 +57,12 @@ public class ReservationRepositoryImpl implements ReservationRepository{
 
     }
 
+    /**
+     * Update reservation status
+     * @param reservationId
+     * @param status
+     * @return true if the status was updated successfully, false otherwise
+     */
     @Override
     public boolean updateReservationStatus(String reservationId, String status) {
         try {
@@ -65,6 +78,11 @@ public class ReservationRepositoryImpl implements ReservationRepository{
         }
     }
 
+    /**
+        * Create a Reservation object from an Item object
+     * @param item
+     * @return Reservation object
+     */
     private Reservation createReservationFromItem(Item item) {
         Reservation reservation = new Reservation();
         reservation.setReservationId(item.getString("reservationId"));

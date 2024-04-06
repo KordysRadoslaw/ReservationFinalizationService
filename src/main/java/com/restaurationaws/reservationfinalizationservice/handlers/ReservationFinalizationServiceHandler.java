@@ -17,6 +17,9 @@ import com.restaurationaws.reservationfinalizationservice.repositories.Reservati
 import com.restaurationaws.reservationfinalizationservice.services.ReservationService;
 import com.restaurationaws.reservationfinalizationservice.services.ReservationServiceImpl;
 
+/**
+ * Implementation of the RequestHandler interface for the ReservationFinalizationServiceHandler
+ */
 public class ReservationFinalizationServiceHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private final ReservationDynamoDB reservationRepository;
@@ -33,6 +36,12 @@ public class ReservationFinalizationServiceHandler implements RequestHandler<API
     }
 
 
+    /**
+     * This method handles the http post request for the /restaurant/finishReservation API endpoint
+     * @param input
+     * @param context
+     * @return APIGatewayProxyResponseEvent with the status code and body
+     */
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
         LambdaLogger logger = context.getLogger();
@@ -63,6 +72,12 @@ public class ReservationFinalizationServiceHandler implements RequestHandler<API
         }
     }
 
+    /**
+     * This method handles the http delete request for the /restaurant/cancelReservation API endpoint
+     * @param input
+     * @param context
+     * @return APIGatewayProxyResponseEvent with the status code and body
+     */
     public APIGatewayProxyResponseEvent cancelReservation(APIGatewayProxyRequestEvent input, Context context) {
         LambdaLogger logger = context.getLogger();
         logger.log("Handling http delete for /restaurant/cancelReservation API endpoint");
@@ -78,6 +93,12 @@ public class ReservationFinalizationServiceHandler implements RequestHandler<API
 
 
 
+       /**
+     * This method handles the http delete request for the /restaurant/deleteReservation API endpoint
+     * @param input
+     * @param context
+     * @return APIGatewayProxyResponseEvent with the status code and body
+     */
     public APIGatewayProxyResponseEvent deleteReservation(APIGatewayProxyRequestEvent input, Context context) {
         LambdaLogger logger = context.getLogger();
         logger.log("Handling http delete for /restaurant/deleteReservation API endpoint");
